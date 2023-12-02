@@ -1,5 +1,6 @@
 use lazy_static;
 use regex::Regex;
+use std::cmp::max;
 use std::str::FromStr;
 
 advent_of_code::solution!(2);
@@ -11,7 +12,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     // 12 red cubes, 13 green cubes, and 14 blue cubes
     let max: (u32, u32, u32) = (12, 13, 14);
 
-    let res = games
+    games
         .filter_map(|game| {
             for round in game.rounds {
                 if round.red > max.0 || round.green > max.1 || round.blue > max.2 {
@@ -20,31 +21,26 @@ pub fn part_one(input: &str) -> Option<u32> {
             }
             Some(game.id)
         })
-        .sum();
-    Some(res)
+        .sum::<u32>()
+        .into()
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
     let games = input.lines().map(|line| Game::from_str(line).unwrap());
 
-    let res = games
+    games
         .filter_map(|game| {
-            let mut max: (u32, u32, u32) = (0, 0, 0);
-            for round in game.rounds {
-                if round.red > max.0 {
-                    max.0 = round.red;
-                }
-                if round.green > max.1 {
-                    max.1 = round.green;
-                }
-                if round.blue > max.2 {
-                    max.2 = round.blue;
-                }
-            }
-            Some(max.0 * max.1 * max.2)
+            game.rounds
+                .into_iter()
+                .reduce(|a, b| Round {
+                    red: max(a.red, b.red),
+                    green: max(a.green, b.green),
+                    blue: max(a.blue, b.blue),
+                })
+                .and_then(|round| Some(round.red * round.green * round.blue))
         })
-        .sum();
-    Some(res)
+        .sum::<u32>()
+        .into()
 }
 
 #[derive(Debug)]
