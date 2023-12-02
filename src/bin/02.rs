@@ -82,9 +82,6 @@ lazy_static::lazy_static! {
 
 impl Round {
     fn new(input: &str) -> Self {
-        // let re = Regex::new(r"(\d+) (\w+)").unwrap();
-        // let re = &*RE;
-        // 3 blue, 4 red
         let mut blue = 0;
         let mut red = 0;
         let mut green = 0;
