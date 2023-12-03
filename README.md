@@ -13,7 +13,8 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 | :---: | :---: | :---:  |
 | [Day 1](./src/bin/01.rs) | `76.2µs` | `1.6ms` |
 | [Day 2](./src/bin/02.rs) | `191.3µs` | `188.9µs` |
-**Total: 2.06ms**
+| [Day 3](./src/bin/03.rs) | `510.6µs` | `673.2µs` |
+**Total: 3.33ms**
 
 ---
 
@@ -192,7 +193,7 @@ Uncomment the respective sections in the `ci.yml` workflow.
 -   [itertools](https://crates.io/crates/itertools): Extends iterators with extra methods and adaptors. Frequently useful for aoc puzzles.
 -   [regex](https://crates.io/crates/regex): Official regular expressions implementation for Rust.
 
-A curated list of popular crates can be found on [blessred.rs](https://blessed.rs/crates).
+A curated list of popular crates can be found on [blessed.rs](https://blessed.rs/crates).
 
 Do you have aoc-specific crate recommendations? [Share them!](https://github.com/fspoettel/advent-of-code-rust/edit/main/README.md)
 
