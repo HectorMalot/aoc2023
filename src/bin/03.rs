@@ -10,7 +10,7 @@ pub fn part_one(input: &str) -> Option<u32> {
             if part
                 .neighbours()
                 .iter()
-                .any(|pos| linklist.get(pos).map(|_| true).unwrap_or(false))
+                .any(|pos| linklist.contains_key(pos))
             {
                 return Some(part.val);
             }
