@@ -7,12 +7,14 @@ pub fn part_one(input: &str) -> Option<u32> {
     let res = partlist
         .iter()
         .filter_map(|(_pos, part)| {
-            let neighbours = part.neighbours();
-            if neighbours.iter().any(|pos| linklist.get(pos).is_some()) {
-                Some(part.val)
-            } else {
-                None
+            if part
+                .neighbours()
+                .iter()
+                .any(|pos| linklist.get(pos).map(|_| true).unwrap_or(false))
+            {
+                return Some(part.val);
             }
+            None
         })
         .sum::<i32>();
     Some(res as u32)
@@ -21,8 +23,7 @@ pub fn part_one(input: &str) -> Option<u32> {
 pub fn part_two(input: &str) -> Option<u32> {
     let (partlist, mut linklist) = parse_input(input);
     for (pos, part) in partlist.iter() {
-        let neighbours = part.neighbours();
-        for neighbour in neighbours {
+        for neighbour in part.neighbours() {
             if let Some(link) = linklist.get_mut(&neighbour) {
                 link.neighbours.push(*pos);
             }
