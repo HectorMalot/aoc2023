@@ -60,7 +60,6 @@ fn parse(input: &str) -> Vec<Card> {
         .collect()
 }
 
-#[allow(dead_code)]
 #[derive(Debug)]
 struct Card {
     id: u32,
