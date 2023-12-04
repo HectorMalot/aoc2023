@@ -1,5 +1,4 @@
 advent_of_code::solution!(4);
-use std::collections::HashMap;
 
 pub fn part_one(input: &str) -> Option<u32> {
     let cards = parse(input);
@@ -8,21 +7,19 @@ pub fn part_one(input: &str) -> Option<u32> {
 
 pub fn part_two(input: &str) -> Option<u32> {
     let cards = parse(input);
-    let mut stack = HashMap::<u32, u32>::new();
-
-    cards.iter().for_each(|c| {
-        stack.insert(c.id, 1);
-    });
+    // let mut stack = HashMap::<u32, u32>::new();
+    let mut stack = vec![1; cards.len()];
 
     for card in cards {
         let s = card.matches();
         for n in 1..=s {
-            if let Some(v) = stack.get(&(card.id + n)) {
-                stack.insert(card.id + n, v + stack.get(&card.id).unwrap());
-            }
+            stack[(card.id + n - 1) as usize] += stack[(card.id - 1) as usize];
+            // if let Some(v) = stack.get(&(card.id + n)) {
+            //     stack.insert(card.id + n, v + stack.get(&card.id).unwrap());
+            // }
         }
     }
-    Some(stack.iter().map(|(_k, v)| *v).sum())
+    Some(stack.iter().sum())
 }
 
 impl Card {
@@ -51,14 +48,12 @@ fn parse(input: &str) -> Vec<Card> {
             let id = id.split_whitespace().last().unwrap().parse().unwrap();
             let (left, right) = rhs.split_once(" | ").unwrap();
             let left = left
-                .trim()
                 .split_whitespace()
-                .map(|s| s.parse().unwrap())
+                .filter_map(|s| s.parse().ok())
                 .collect();
             let right = right
-                .trim()
                 .split_whitespace()
-                .map(|s| s.parse().unwrap())
+                .filter_map(|s| s.parse().ok())
                 .collect();
             Card { id, left, right }
         })
