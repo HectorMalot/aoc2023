@@ -45,7 +45,6 @@ pub fn part_two(input: &str) -> Option<u64> {
                 let mapped = m.map_range(*seed);
                 next.extend(mapped);
             }
-            // Optionally: merge overlapping ranges here
             seeds = next;
             seeds.clone()
         })
