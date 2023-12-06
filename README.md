@@ -1,7 +1,5 @@
 # 🎄 Advent of Code 2023
 
-![Christmas Ferris](./.assets/christmas_ferris.png)
-
 Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.rust-lang.org/).
 
 <!--- advent_readme_stars table --->
@@ -11,13 +9,14 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 
 | Day | Part 1 | Part 2 |
 | :---: | :---: | :---:  |
-| [Day 1](./src/bin/01.rs) | `72.6µs` | `1.7ms` |
-| [Day 2](./src/bin/02.rs) | `191.0µs` | `188.8µs` |
-| [Day 3](./src/bin/03.rs) | `511.0µs` | `673.3µs` |
-| [Day 4](./src/bin/04.rs) | `135.0µs` | `120.4µs` |
-| [Day 5](./src/bin/05.rs) | `28.6µs` | `146.6µs` |
+| [Day 1](./src/bin/01.rs) | `73.9µs` | `1.7ms` |
+| [Day 2](./src/bin/02.rs) | `190.2µs` | `186.6µs` |
+| [Day 3](./src/bin/03.rs) | `511.0µs` | `671.0µs` |
+| [Day 4](./src/bin/04.rs) | `132.9µs` | `119.1µs` |
+| [Day 5](./src/bin/05.rs) | `28.4µs` | `145.9µs` |
+| [Day 6](./src/bin/06.rs) | `51.9µs` | `181.0ns` |
 
-**Total: 3.77ms**
+**Total: 3.81ms**
 
 ---
 
