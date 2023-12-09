@@ -4,15 +4,15 @@ advent_of_code::solution!(9);
 
 pub fn part_one(input: &str) -> Option<i128> {
     let s = input.lines().map(|l| l.into()).collect::<Vec<Series>>();
-    (s.iter()
+    s.iter()
         .map(|s| s.forecast(s.numbers.len() as i128))
-        .sum::<i128>() as i128)
+        .sum::<i128>()
         .into()
 }
 
 pub fn part_two(input: &str) -> Option<i128> {
     let s = input.lines().map(|l| l.into()).collect::<Vec<Series>>();
-    (s.iter().map(|s| s.forecast(-1_i128)).sum::<i128>() as i128).into()
+    s.iter().map(|s| s.forecast(-1_i128)).sum::<i128>().into()
 }
 
 #[derive(Debug)]
