@@ -4,12 +4,216 @@ advent_of_code::solution!(10);
 
 pub fn part_one(input: &str) -> Option<u32> {
     let mut m = input.parse::<Maze>().unwrap();
-    while !m.step() {}
+    while m.step() {}
     Some(m.steps / 2)
 }
 
-pub fn part_two(_input: &str) -> Option<u32> {
-    None
+pub fn part_two(input: &str) -> Option<u32> {
+    let mut m = input.parse::<Maze>().unwrap();
+    let mut classified_map = vec![vec![Classification::Unvisited; m.pipes[0].len()]; m.pipes.len()];
+    classified_map[m.current.1][m.current.0] = Classification::Pipe;
+
+    // 1 round to classify all pipes
+    while m.step() {
+        classified_map[m.current.1][m.current.0] = Classification::Pipe;
+    }
+
+    // 2nd round to find the areas to the left and the right of the walking path
+    m.direction = Direction::West;
+    while m.step() {
+        let (x, y) = (m.current.0, m.current.1);
+        match (&m.direction, &m.pipes[m.current.1][m.current.0]) {
+            // Straight pipes
+            (Direction::North, Pipe::NS) => {
+                if x > 0 && (classified_map[y][x - 1] == Classification::Unvisited) {
+                    classified_map[y][x - 1] = Classification::Left;
+                }
+                if x < classified_map[y].len() - 1
+                    && classified_map[y][x + 1] == Classification::Unvisited
+                {
+                    classified_map[y][x + 1] = Classification::Right;
+                }
+            }
+            (Direction::South, Pipe::NS) => {
+                if x > 0 && classified_map[y][x - 1] == Classification::Unvisited {
+                    classified_map[y][x - 1] = Classification::Right;
+                }
+                if x < classified_map[y].len() - 1
+                    && classified_map[y][x + 1] == Classification::Unvisited
+                {
+                    classified_map[y][x + 1] = Classification::Left;
+                }
+            }
+            (Direction::East, Pipe::EW) => {
+                if y > 0 && classified_map[y - 1][x] == Classification::Unvisited {
+                    classified_map[y - 1][x] = Classification::Left;
+                }
+                if y < classified_map.len() - 1
+                    && classified_map[y + 1][x] == Classification::Unvisited
+                {
+                    classified_map[y + 1][x] = Classification::Right;
+                }
+            }
+            (Direction::West, Pipe::EW) => {
+                if y > 0 && classified_map[y - 1][x] == Classification::Unvisited {
+                    classified_map[y - 1][x] = Classification::Right;
+                }
+                if y < classified_map.len() - 1
+                    && classified_map[y + 1][x] == Classification::Unvisited
+                {
+                    classified_map[y + 1][x] = Classification::Left;
+                }
+            }
+            // Corner pipes
+            (Direction::North, Pipe::NE) => {
+                if x > 0 && classified_map[y][x - 1] == Classification::Unvisited {
+                    classified_map[y][x - 1] = Classification::Left;
+                }
+                if y < classified_map.len() - 1
+                    && classified_map[y + 1][x] == Classification::Unvisited
+                {
+                    classified_map[y + 1][x] = Classification::Left;
+                }
+            }
+            (Direction::East, Pipe::NE) => {
+                if x > 0 && classified_map[y][x - 1] == Classification::Unvisited {
+                    classified_map[y][x - 1] = Classification::Right;
+                }
+                if y < classified_map.len() - 1
+                    && classified_map[y + 1][x] == Classification::Unvisited
+                {
+                    classified_map[y + 1][x] = Classification::Right;
+                }
+            }
+            (Direction::North, Pipe::NW) => {
+                if x < classified_map[y].len() - 1
+                    && classified_map[y][x + 1] == Classification::Unvisited
+                {
+                    classified_map[y][x + 1] = Classification::Right;
+                }
+                if y < classified_map.len() - 1
+                    && classified_map[y + 1][x] == Classification::Unvisited
+                {
+                    classified_map[y + 1][x] = Classification::Right;
+                }
+            }
+            (Direction::West, Pipe::NW) => {
+                if x < classified_map[y].len() - 1
+                    && classified_map[y][x + 1] == Classification::Unvisited
+                {
+                    classified_map[y][x + 1] = Classification::Left;
+                }
+                if y < classified_map.len() - 1
+                    && classified_map[y + 1][x] == Classification::Unvisited
+                {
+                    classified_map[y + 1][x] = Classification::Left;
+                }
+            }
+            (Direction::East, Pipe::SE) => {
+                if x > 0 && classified_map[y][x - 1] == Classification::Unvisited {
+                    classified_map[y][x - 1] = Classification::Left;
+                }
+                if y > 0 && classified_map[y - 1][x] == Classification::Unvisited {
+                    classified_map[y - 1][x] = Classification::Left;
+                }
+            }
+            (Direction::South, Pipe::SE) => {
+                if x > 0 && classified_map[y][x - 1] == Classification::Unvisited {
+                    classified_map[y][x - 1] = Classification::Right;
+                }
+                if y > 0 && classified_map[y - 1][x] == Classification::Unvisited {
+                    classified_map[y - 1][x] = Classification::Right;
+                }
+            }
+            // new
+            (Direction::South, Pipe::SW) => {
+                if x < classified_map[y].len() - 1
+                    && classified_map[y][x + 1] == Classification::Unvisited
+                {
+                    classified_map[y][x + 1] = Classification::Left;
+                }
+                if y > 0 && classified_map[y - 1][x] == Classification::Unvisited {
+                    classified_map[y - 1][x] = Classification::Left;
+                }
+            }
+            (Direction::West, Pipe::SW) => {
+                if x < classified_map[y].len() - 1
+                    && classified_map[y][x + 1] == Classification::Unvisited
+                {
+                    classified_map[y][x + 1] = Classification::Right;
+                }
+                if y > 0 && classified_map[y - 1][x] == Classification::Unvisited {
+                    classified_map[y - 1][x] = Classification::Right;
+                }
+            }
+            _ => panic!("Invalid pipe at {:?}", m.current),
+        }
+    }
+
+    // This is inefficient (multiple loops over the map) but I don't feel like
+    // fighting the borrow checker right now
+    let mut unclassified = true;
+    while unclassified {
+        unclassified = false;
+        for y in 0..classified_map.len() {
+            for x in 0..classified_map[y].len() {
+                match classified_map[y][x] {
+                    Classification::Left | Classification::Right => {
+                        let mut n = vec![];
+                        if x > 0 {
+                            n.push((x - 1, y));
+                        }
+                        if x < classified_map[y].len() - 1 {
+                            n.push((x + 1, y));
+                        }
+                        if y > 0 {
+                            n.push((x, y - 1));
+                        }
+                        if y < classified_map.len() - 1 {
+                            n.push((x, y + 1));
+                        }
+                        let mut n = n
+                            .into_iter()
+                            .filter(|(x, y)| {
+                                *x < classified_map[0].len()
+                                    && *y < classified_map.len()
+                                    && x >= &0
+                                    && y >= &0
+                                    && classified_map[*y][*x] == Classification::Unvisited
+                            })
+                            .collect::<Vec<(usize, usize)>>();
+
+                        while let Some((x2, y2)) = n.pop() {
+                            classified_map[y2][x2] = classified_map[y][x].clone();
+                        }
+                    }
+                    Classification::Unvisited => unclassified = true,
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    // count all pipe classifications
+    let counts = classified_map
+        .iter()
+        .map(|row| {
+            row.iter().fold(
+                (0, 0),
+                |(left, right), classification| match classification {
+                    Classification::Left => (left + 1, right),
+                    Classification::Right => (left, right + 1),
+                    _ => (left, right),
+                },
+            )
+        })
+        .reduce(|(left, right), (left2, right2)| (left + left2, right + right2))
+        .unwrap();
+    if classified_map[0][0] == Classification::Left {
+        Some(counts.1)
+    } else {
+        Some(counts.0)
+    }
 }
 
 #[derive(Debug)]
@@ -42,7 +246,7 @@ impl Maze {
         // check if we need to change direction
         match self.pipes[self.current.1][self.current.0] {
             Pipe::NS | Pipe::EW => {}
-            Pipe::Start => return true,
+            Pipe::Start => return false,
             Pipe::NE => match self.direction {
                 Direction::South => self.direction = Direction::East,
                 Direction::West => self.direction = Direction::North,
@@ -65,7 +269,7 @@ impl Maze {
             },
             Pipe::Ground => panic!("Fell off the maze at {:?}", self.current),
         }
-        return false;
+        return true;
     }
 }
 
@@ -87,6 +291,14 @@ enum Pipe {
     SW,
     Start,
     Ground,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+enum Classification {
+    Pipe,
+    Left,
+    Right,
+    Unvisited,
 }
 
 impl From<char> for Pipe {
